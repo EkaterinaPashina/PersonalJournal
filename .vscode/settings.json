@@ -1,5 +1,5 @@
 {
     "editor.codeActionsOnSave": {
-        "sourse.fixAll.eslint": true
+        "sourse.fixAll.eslint": "explicit"
     },
 }
