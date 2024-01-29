@@ -1,27 +1,21 @@
 import './JournalForm.css';
 import Button from '../Button/Button';
-import { useState } from 'react';
 
-function JournalForm() {
-    const [inputData, SetInputData] = useState('');
-    const inputChange = (event) => {
-        SetInputData(event.target.value);
-    };
+function JournalForm({ onSubmit }) {
 
     const AddJournalItem = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const formProps = Object.fromEntries(formData);
-        console.log(formProps);
-
-    }
+        onSubmit(formProps);
+    };
 
     return (
         <form className='journal-form' onSubmit={AddJournalItem}>
             <input type="text" name="title" />
             <input type='date' name="date" />
-            <input type="text" name="tag" value={inputData} onChange={inputChange} />
-            <textarea name="post" />
+            <input type="text" name="tag" />
+            <textarea name="text" />
             <Button text="Сохранить" />
         </form>
     );

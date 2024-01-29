@@ -9,20 +9,42 @@ import LeftPanel from './layouts/LeftPanel/LeftPanel';
 // import Button from './components/Button/Button';
 import JournalAddButton from './components/JournalAddButton/JournalAddButton';
 import JournalForm from './components/JournalForm/JournalForm';
+import { useState } from 'react';
+
+const INITIAL_DATA = [
+  {
+    id: 1,
+    title: 'Заголовок1',
+    text: 'Текст1',
+    date: new Date()
+  },
+  {
+    id: 2,
+    title: 'Заголовок2',
+    text: 'Текст2',
+    date: new Date()
+  }
+];
 
 function App() {
-  const data = [
-    {
-      title: 'Заголовок',
-      text: 'Текст',
-      date: new Date()
-    },
-    {
-      title: 'Заголовок',
-      text: 'Текст',
-      date: new Date()
+  const [items, setItems] = useState(INITIAL_DATA);
+
+  const addItem = item => {
+    setItems(oldItems => [...oldItems, {
+      text: item.text,
+      title: item.title,
+      date: new Date(item.date),
+      id: Math.max(...oldItems.map(i => i.id)) + 1
+    }]);
+  };
+
+  const sortItems = (a, b) => {
+    if (a.date > b.date) {
+      return 1;
+    } else {
+      return -1;
     }
-  ];
+  };
 
   return (
     <div className='app'>
@@ -30,26 +52,20 @@ function App() {
         <Header />
         <JournalAddButton />
         <JournalList>
-          <CardButton>
-            <JournalItem
-              title={data[0].title}
-              post={data[0].text}
-              date={data[0].date}
-            />
-          </CardButton>
-          <CardButton>
-            <JournalItem
-              title={data[1].title}
-              post={data[1].text}
-              date={data[1].date}
-            />
-          </CardButton>
+          {items.sort(sortItems).map(el =>
+            <CardButton key={el.id}>
+              <JournalItem
+                title={el.title}
+                text={el.text}
+                date={el.date} />
+            </CardButton>
+          )}
         </JournalList>
       </LeftPanel>
       <Body>
-        <JournalForm />
+        <JournalForm onSubmit={addItem} />
       </Body>
-    </div>
+    </div >
   );
 }
 
